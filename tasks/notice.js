@@ -53,7 +53,7 @@ async function getHtml() {
     run(browser, page);
 
     let rule = new schedule.RecurrenceRule(); 
-    rule.minute = [0, 5, 10, 13, 15, 20, 25, 30, 35, 40, 45, 50, 55]
+    rule.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
     schedule.scheduleJob(rule, async function () {
       console.log('开启定时任务')
       // page = await initYoudaoPage(browser)
