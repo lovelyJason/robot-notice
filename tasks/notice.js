@@ -99,20 +99,22 @@ async function run(browser, page) {
       // 比较新旧文档
       newNote = noteText
       const diffArr = diffNote(oldNote, newNote)
+      console.log(diffArr)
       if(diffArr.length > 0) {
         // console.log('note changed', diffArr)
         // 调用机器人发送信息
         let content = `需求文档被修改，点击查看${config.url || 'https://note.youdao.com/ynoteshare1/index.html?id=f20811452fd279ad4a97f8abba81acbb&type=note'}\n\n`
         let reg = /^[\s\n\r[\ |\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\+|\=|\||\\|\[|\]|\{|\}|\;|；|\:|：|\"|\'|\,|，|\<|\.|。|\>|\/|\?]{1,}$/
-        let changeStr = diffArr.
-          filter(val => {
-            // 去掉空白字符以及全部为标点符号的
-            return val.value && val.value.trim() && !reg.test(val.value)
-          })
+        let validDiffArr = diffArr.filter(val => {
+          // 去掉空白字符以及全部为标点符号的
+          return val.value && val.value.trim() && !reg.test(val.value)
+        })
+        if(validDiffArr.length === 0) return
+        let changeStr = validDiffArr
           .map(val => {
             return `${val.added ? '新增' : '删除'}------${val.value}`
           })
-        .join('\n')
+          .join('\n')
         content += changeStr
         let postData = {
           content
