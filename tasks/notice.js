@@ -2,7 +2,8 @@ const fs = require('fs')
 const path = require('path')
 const cheerio = require("cheerio");
 const superagent = require("superagent");
-const puppeteer = require("puppeteer-core");
+const isDev = process.env.NODE_ENV === 'development' ? true : false
+const puppeteer = isDev ? require("puppeteer-core") : require('puppeteer');
 const schedule = require("node-schedule");
 const jsDiff = require('diff')
 const axios = require('axios')
@@ -12,6 +13,7 @@ const config = require('./config')
 
 let oldNote = '', newNote = ''
 let count = 1
+
 
 async function getHtml() {
   // superagent
@@ -25,9 +27,11 @@ async function getHtml() {
   //     }
   //   })
   try {
-    const browser = await puppeteer.launch({
+    let executablePath = "C:/Program Files/Google/Chrome/Application/chrome.exe"
+    // let executablePath = "C:/Users/kingdee/Downloads/chromedriver_win32/chromedriver.exe"
+    let launchOptions = {
       headless: true,
-      executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe",
+      // executablePath,
       ignoreDefaultArgs: ["--enable-automation"],
       args: [
         "--disable-blink-features=AutomationControlled",
@@ -37,7 +41,9 @@ async function getHtml() {
         "--disable-setuid-sandbox",
         "--remote-debugging-port=9222"  // 开启远程调试
       ],
-    });
+    }
+    isDev ? launchOptions.executablePath = executablePath : undefined
+    const browser = await puppeteer.launch(launchOptions);
     //直接连接已经存在的 Chrome
     // let browser = await puppeteer.connect({
     //   browserWSEndpoint: version.webSocketDebuggerUrl
@@ -47,7 +53,7 @@ async function getHtml() {
     run(browser, page);
 
     let rule = new schedule.RecurrenceRule(); 
-    rule.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
+    rule.minute = [0, 5, 10, 13, 15, 20, 25, 30, 35, 40, 45, 50, 55]
     schedule.scheduleJob(rule, async function () {
       console.log('开启定时任务')
       // page = await initYoudaoPage(browser)
@@ -72,7 +78,7 @@ async function initYoudaoPage (browser) {
   const url = config.url || "https://note.youdao.com/ynoteshare1/index.html?id=f20811452fd279ad4a97f8abba81acbb&type=note";
   await page.goto(url, {
     waitUntil: "networkidle0",
-    timeout: 30000
+    timeout: 50000
   });
   return page
 }
