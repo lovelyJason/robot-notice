@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const cheerio = require("cheerio");
 const superagent = require("superagent");
+// console.log(process.env.NODE_ENV)
 const isDev = process.env.NODE_ENV === 'development' ? true : false
 const puppeteer = isDev ? require("puppeteer-core") : require('puppeteer');
 const schedule = require("node-schedule");
@@ -13,7 +14,6 @@ const config = require('./config')
 
 let oldNote = '', newNote = ''
 let count = 1
-
 
 async function getHtml() {
   // superagent
@@ -102,7 +102,7 @@ async function run(browser, page) {
       if(diffArr.length > 0) {
         // console.log('note changed', diffArr)
         // 调用机器人发送信息
-        let content = `需求文档被修改，点击查看https://note.youdao.com/ynoteshare1/index.html?id=f20811452fd279ad4a97f8abba81acbb&type=note\n\n`
+        let content = `需求文档被修改，点击查看${config.url || 'https://note.youdao.com/ynoteshare1/index.html?id=f20811452fd279ad4a97f8abba81acbb&type=note'}\n\n`
         let reg = /^[\s\n\r[\ |\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\+|\=|\||\\|\[|\]|\{|\}|\;|；|\:|：|\"|\'|\,|，|\<|\.|。|\>|\/|\?]{1,}$/
         let changeStr = diffArr.
           filter(val => {
@@ -118,7 +118,7 @@ async function run(browser, page) {
           content
         }
         console.log('机器人消息', content)
-        axios.post('https://www.yunzhijia.com/gateway/robot/webhook/send?yzjtype=0&yzjtoken=5e7ad7f53e4649a0a2f9d2de5fd7f5d3', postData)
+        axios.post(config.webhook || 'https://www.yunzhijia.com/gateway/robot/webhook/send?yzjtype=0&yzjtoken=5e7ad7f53e4649a0a2f9d2de5fd7f5d3', postData)
       } else {
         console.log('no change')
       }
