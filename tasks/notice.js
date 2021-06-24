@@ -53,7 +53,7 @@ async function getHtml() {
     run(browser, page);
 
     let rule = new schedule.RecurrenceRule(); 
-    rule.hour = [9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    rule.hour = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
     rule.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
     schedule.scheduleJob(rule, async function () {
       console.log('开启定时任务')
@@ -141,6 +141,7 @@ async function run(browser, page) {
     // await browser.close()
     
   } catch (error) {
+    // 此处错误没有对外抛出，外部调用不会捕获
     console.log(error.message)
   }
 
