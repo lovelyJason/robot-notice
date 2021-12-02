@@ -38,13 +38,13 @@ module.exports = {
       axios.post(webhook, postData)
     } else if(object_kind === 'merge_request') {
       let { 
-        user,
+        // user,
         object_attributes: {
           source_branch,
           target_branch,
           // source,
           // target
-          last_commit
+          last_commit = {}
         } = {},    // 合并相关信息
       } = req.body
       if(!(['dev', 'master', 'main'].includes(source_branch) || ['dev', 'master', 'main'].includes(target_branch))) {
@@ -53,8 +53,9 @@ module.exports = {
           messag: 'success'
         })
       }
-      let lastCommitMessage = last_commit[0] && last_commit[0].message && last_commit[0].message.replace(reg, '')
-      content = `「${user.username}」在「${source_branch}」发起了一个MR\n标题: "${lastCommitMessage}"\n查看MR详情`
+      let lastCommitMessage = last_commit.message && last_commit.message.replace(reg, '')
+      let lastCommitUsername = last_commit.author && last_commit.author.name
+      content = `「${lastCommitUsername}」在「${source_branch}」发起了一个MR\n标题: "${lastCommitMessage}"\n查看MR详情${last_commit.url}`
       let postData ={
         content
       }
