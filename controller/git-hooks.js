@@ -1,4 +1,4 @@
-const config = require('./config')
+const config = require('../tasks/config')
 const axios = require('axios')
 
 const { webhook } = config.git
