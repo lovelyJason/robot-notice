@@ -8,12 +8,11 @@ module.exports = {
    * @author jasonhuang
    */
   init(req, res, next) {
+    console.log(req.body)
     let { 
       object_kind,
       project = {},
     } = req.body
-    let { source_branch } = object_attributes || {}
-    console.log(req.body)
     if(!['dev, master, main'].includes(source_branch)) {
       return res.send({
         code: 0,
