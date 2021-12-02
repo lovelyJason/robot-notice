@@ -31,7 +31,7 @@ module.exports = {
       }
       let lastCommitMessage = commits[0] && commits[0].message && commits[0].message.replace(reg, '')
       let lastCommitUsername = commits[0] && commits[0].author && commits[0].author.name
-      content = `项目「${project.name}」收到一次push提交[汗]\n提交者:「${lastCommitUsername}」\n分支:「${ref}」\n最新提交信息: "${lastCommitMessage}"`
+      content = `项目「${project.name}」收到一次push提交[汗]\n提交者:「${lastCommitUsername}」\n分支:「${ref}」\n最新提交信息: ${lastCommitMessage}`
       let postData ={
         content
       }
@@ -55,7 +55,7 @@ module.exports = {
       }
       let lastCommitMessage = last_commit.message && last_commit.message.replace(reg, '')
       let lastCommitUsername = last_commit.author && last_commit.author.name
-      content = `「${lastCommitUsername}」在「${source_branch}」发起了一个MR\n标题: "${lastCommitMessage}"\n查看MR详情${last_commit.url}`
+      content = `「${lastCommitUsername}」在「${source_branch}」发起了一个MR\n标题: ${lastCommitMessage}\n查看MR详情${last_commit.url}`
       let postData ={
         content
       }
