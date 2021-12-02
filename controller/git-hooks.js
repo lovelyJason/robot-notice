@@ -3,6 +3,11 @@ const axios = require('axios')
 
 const { webhook } = config.git
 
+function randomFromCollection(collection) {
+  var item = collection[Math.floor(Math.random() * collection.length)];
+  return item
+}
+
 module.exports = {
   /**
    * @author jasonhuang
@@ -16,6 +21,9 @@ module.exports = {
     let content = ''
     // "合并分支 'zjian_dev' 到 'dev'\n\n支付页面新增  ISV数据看板\n\n查看合并请求 appmarketplace"
     let reg = /\s*查看合并请求.*/
+    // [奋斗][吃惊][翻白眼][馋嘴][懒得理你][思考][憋屈][发愣][渴望][兴奋][嘘][疑问][汗][困][打哈气][睡觉][哼][闭嘴][doge][嘿哈][收到][皱眉]
+    let emojis = ['[奋斗]', '[吃惊]', '[翻白眼]', '[馋嘴]', '[懒得理你]', '[思考]', '[憋屈]', '[发愣]', '[渴望]', '[兴奋]', '[嘘]', '[汗]','[困]','[打哈气]','[睡觉]','[哼]','[闭嘴]','[闭嘴]','[doge]','[嘿哈]','[收到]','[皱眉]' ]
+    let emoji = randomFromCollection(emojis)
     if(object_kind === 'push') {
       let {
         ref = '',
@@ -32,7 +40,7 @@ module.exports = {
       let lastCommitMessage = commits[0] && commits[0].message && commits[0].message.replace(reg, '')
       let lastCommitUsername = commits[0] && commits[0].author && commits[0].author.name
       let lastCommitUrl = commits[0] && commits[0].url
-      content = `项目「${project.name}」收到一次push提交[汗]\n提交者:「${lastCommitUsername}」\n分支:「${ref}」\n最新提交信息: ${lastCommitMessage}\n查看push详情${lastCommitUrl}`
+      content = `项目「${project.name}」收到一次push提交${emoji}\n提交者:「${lastCommitUsername}」\n分支:「${ref}」\n最新提交信息: ${lastCommitMessage}\n查看push详情${lastCommitUrl}`
       let postData ={
         content
       }
@@ -59,7 +67,7 @@ module.exports = {
       let lastCommitMessage = last_commit.message && last_commit.message.replace(reg, '')
       // let lastCommitUsername = last_commit.author && last_commit.author.name
       let lastCommitUsername = user.username
-      content = `「${lastCommitUsername}」在「${source_branch}」发起了一个MR\n标题: ${lastCommitMessage}\n源分支: ${source_branch}\n目标分支: ${target_branch}\n查看MR详情${last_commit.url}`
+      content = `${emoji}「${lastCommitUsername}」在「${source_branch}」发起了一个MR\n标题: ${lastCommitMessage}\n源分支: ${source_branch}\n目标分支: ${target_branch}\n查看MR详情${last_commit.url}`
       let postData ={
         content
       }
