@@ -13,6 +13,10 @@ module.exports = {
       object_kind,
       project = {},
     } = req.body
+    res.send({
+      code: 0,
+      messag: 'success'
+    })
     let content = ''
     // "合并分支 'zjian_dev' 到 'dev'\n\n支付页面新增  ISV数据看板\n\n查看合并请求 appmarketplace"
     let reg = /\s*查看合并请求.*/
@@ -50,10 +54,6 @@ module.exports = {
       }
       axios.post(webhook, postData)
     }
-    res.send({
-      code: 0,
-      messag: 'success'
-    })
 
   }
 
