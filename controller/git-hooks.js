@@ -41,7 +41,7 @@ module.exports = {
           target
         },    // 合并相关信息
         last_commit
-      } = this.req.body
+      } = req.body
       if(!(['dev, master, main'].includes(source_branch) || ['dev, master, main'].includes(target_branch))) return
       let lastCommitMessage = last_commit[0] && last_commit[0].message && last_commit[0].message.replace(reg, '')
       content = `「${user.username}」在「${source_branch}」发起了一个MR\n标题: "${lastCommitMessage}"\n查看MR详情`
