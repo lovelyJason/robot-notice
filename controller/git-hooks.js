@@ -38,7 +38,7 @@ module.exports = {
       }
       axios.post(webhook, postData)
     } else if(object_kind === 'merge_request') {
-      console.log('有合并请求')
+      console.log('有合并请求, last_commit:')
       let { 
         user,
         object_attributes: {
@@ -49,6 +49,7 @@ module.exports = {
           last_commit = {}
         } = {},    // 合并相关信息
       } = req.body
+      console.log(last_commit)
       if(!(['dev', 'master', 'main'].includes(source_branch) || ['dev', 'master', 'main'].includes(target_branch))) {
         return res.send({
           code: 0,
