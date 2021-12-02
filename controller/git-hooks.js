@@ -44,8 +44,8 @@ module.exports = {
           target_branch,
           // source,
           // target
-        },    // 合并相关信息
-        last_commit
+          last_commit
+        } = {},    // 合并相关信息
       } = req.body
       if(!(['dev', 'master', 'main'].includes(source_branch) || ['dev', 'master', 'main'].includes(target_branch))) {
         return res.send({
