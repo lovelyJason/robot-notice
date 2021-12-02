@@ -34,11 +34,11 @@ module.exports = {
     } else if(object_kind === 'merge_request') {
       let { 
         user,
-        object_attributes = {
+        object_attributes: {
           source_branch,
           target_branch,
-          source,
-          target
+          // source,
+          // target
         },    // 合并相关信息
         last_commit
       } = req.body
