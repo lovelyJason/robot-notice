@@ -11,7 +11,7 @@ var app = express();
 
 var notice = require('./tasks/notice')
 
-notice()
+// notice()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
