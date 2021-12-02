@@ -8,7 +8,7 @@ module.exports = {
    * @author jasonhuang
    */
   init(req, res, next) {
-    console.log(req.body)
+    // console.log(req.body)
     let { 
       object_kind,
       project = {},
@@ -31,14 +31,16 @@ module.exports = {
       }
       let lastCommitMessage = commits[0] && commits[0].message && commits[0].message.replace(reg, '')
       let lastCommitUsername = commits[0] && commits[0].author && commits[0].author.name
-      content = `项目「${project.name}」收到一次push提交[汗]\n提交者:「${lastCommitUsername}」\n分支:「${ref}」\n最新提交信息: ${lastCommitMessage}`
+      let lastCommitUrl = commits[0] && commits[0].url
+      content = `项目「${project.name}」收到一次push提交[汗]\n提交者:「${lastCommitUsername}」\n分支:「${ref}」\n最新提交信息: ${lastCommitMessage}\n查看push详情${lastCommitUrl}`
       let postData ={
         content
       }
       axios.post(webhook, postData)
     } else if(object_kind === 'merge_request') {
+      console.log('有合并请求')
       let { 
-        // user,
+        user,
         object_attributes: {
           source_branch,
           target_branch,
@@ -54,8 +56,9 @@ module.exports = {
         })
       }
       let lastCommitMessage = last_commit.message && last_commit.message.replace(reg, '')
-      let lastCommitUsername = last_commit.author && last_commit.author.name
-      content = `「${lastCommitUsername}」在「${source_branch}」发起了一个MR\n标题: ${lastCommitMessage}\n查看MR详情${last_commit.url}`
+      // let lastCommitUsername = last_commit.author && last_commit.author.name
+      let lastCommitUsername = user.username
+      content = `「${lastCommitUsername}」在「${source_branch}」发起了一个MR\n标题: ${lastCommitMessage}\n源分支: ${source_branch}\n目标分支: ${target_branch}\n查看MR详情${last_commit.url}`
       let postData ={
         content
       }
