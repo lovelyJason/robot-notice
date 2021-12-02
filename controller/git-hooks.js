@@ -21,12 +21,7 @@ module.exports = {
         commits
       } = req.body
       if(!(ref.includes('dev') || ref.includes('master')))  return
-      content = `
-        项目「${project.name}」收到一次push提交[汗]\n
-        提交者:「${user_name}」\n
-        分支:「${ref}」\n
-        最新提交信息: "${commits[0] && commits[0].message}"
-      `
+      content = `项目「${project.name}」收到一次push提交[汗]\n提交者:「${user_name}」\n分支:「${ref}」\n最新提交信息: "${commits[0] && commits[0].message}"`
       let postData ={
         content
       }
@@ -43,11 +38,7 @@ module.exports = {
         last_commit
       } = this.req.body
       if(!(['dev, master, main'].includes(source_branch) || ['dev, master, main'].includes(target_branch))) return
-      content = `
-        「${user.username}」在「${source_branch}」发起了一个MR\n
-        标题: "${last_commit[0] && last_commit[0].message}"\n
-        查看MR详情
-      `
+      content = `「${user.username}」在「${source_branch}」发起了一个MR\n标题: "${last_commit[0] && last_commit[0].message}"\n查看MR详情`
       let postData ={
         content
       }
