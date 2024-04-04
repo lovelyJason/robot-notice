@@ -13,7 +13,7 @@ var notice = require('./tasks/notice')
 
 process.env.PORT = 5900
 
-// notice()
+notice()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
