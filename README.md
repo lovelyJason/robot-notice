@@ -12,7 +12,7 @@
 
 ![](https://raw.githubusercontent.com/lovelyJason/robot-notice/master/public/images/document-hook.jpg)
 
-![](https://raw.githubusercontent.com/lovelyJason/robot-notice/master/public/images/git-hook.png)
+![](https://raw.githubusercontent.com/lovelyJason/robot-notice/master/public/images/git-hook.jpeg)
 
 ## 安装
 
