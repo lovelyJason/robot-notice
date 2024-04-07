@@ -10,10 +10,13 @@ var usersRouter = require('./routes/users');
 var app = express();
 
 var notice = require('./tasks/notice')
+var config = require('./config')
 
 process.env.PORT = 5900
 
-notice()
+if (config.spider.enable) {
+  notice()
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

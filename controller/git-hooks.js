@@ -1,4 +1,4 @@
-const config = require('../tasks/config')
+const config = require('../config')
 const axios = require('axios')
 
 const { webhook } = config.git
@@ -71,7 +71,9 @@ module.exports = {
       let postData ={
         content
       }
-      axios.post(webhook, postData)
+      if (webhook) {
+        axios.post(webhook, postData)
+      }
     }
     res.send({
       code: 0,

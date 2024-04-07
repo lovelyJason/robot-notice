@@ -10,7 +10,8 @@ const jsDiff = require('diff')
 const axios = require('axios')
 
 const spiderDisguise = require("../utils/spider-disguise.js");
-const config = require('./config')
+const config = require('../config')
+const spider_config = config.spider
 
 let oldNote = '', newNote = ''
 let count = 1
@@ -52,9 +53,16 @@ async function getHtml() {
     let page = await initYoudaoPage(browser)
     run(browser, page);
 
-    let rule = new schedule.RecurrenceRule(); 
-    rule.hour = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
-    rule.minute = [0, 10, 20, 30, 40, 50]
+    let rule; 
+    if (typeof spider_config === 'string') {
+      rule = spider_config.rule
+    } else {
+      rule = new schedule.RecurrenceRule()
+      for (let key in spider_config.rule) {
+        rule[key] = spider_config.rule[key]
+      }
+      
+    }
     schedule.scheduleJob(rule, async function () {
       console.log('开启定时任务')
       // page = await initYoudaoPage(browser)
@@ -76,7 +84,7 @@ async function initYoudaoPage (browser) {
     // 在每个新页面打开前执行以下脚本
     spiderDisguise();
   });
-  const url = config.url || "https://note.youdao.com/ynoteshare1/index.html?id=f20811452fd279ad4a97f8abba81acbb&type=note";
+  const url = spider_config.url || "https://note.youdao.com/ynoteshare1/index.html?id=f20811452fd279ad4a97f8abba81acbb&type=note";
   await page.goto(url, {
     waitUntil: "networkidle0",
     timeout: 50000
@@ -95,6 +103,7 @@ async function run(browser, page) {
     const html = await frame.content();
     const $ = cheerio.load(html);
     const noteText = $(".bulb-editor").text();
+    console.log(noteText)
     
     if(count > 1) {   // 至少第二次定时任务开始
       // 比较新旧文档
@@ -104,7 +113,7 @@ async function run(browser, page) {
       if(diffArr.length > 0) {
         // console.log('note changed', diffArr)
         // 调用机器人发送信息
-        let content = `需求文档被修改，点击查看${config.url || 'https://note.youdao.com/ynoteshare1/index.html?id=f20811452fd279ad4a97f8abba81acbb&type=note'}\n\n`
+        let content = `需求文档被修改，点击查看${spider_config.url || 'https://note.youdao.com/ynoteshare1/index.html?id=f20811452fd279ad4a97f8abba81acbb&type=note'}\n\n`
         let reg = /^[\s\n\r[\ |\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\+|\=|\||\\|\[|\]|\{|\}|\;|；|\:|：|\"|\'|\,|，|\<|\.|。|\>|\/|\?]{1,}$/
         let validDiffArr = diffArr.filter(val => {
           // 去掉空白字符以及全部为标点符号的
@@ -121,7 +130,9 @@ async function run(browser, page) {
           content
         }
         console.log('机器人消息', content)
-        axios.post(config.webhook || 'https://www.yunzhijia.com/gateway/robot/webhook/send?yzjtype=0&yzjtoken=5e7ad7f53e4649a0a2f9d2de5fd7f5d3', postData)
+        if (spider_config.webhook) {
+          axios.post(spider_config.webhook, postData)
+        }
       } else {
         console.log('no change')
       }
@@ -131,7 +142,7 @@ async function run(browser, page) {
     }
   
     console.log('run complete')
-    fs.writeFile(path.join(process.cwd(), 'text.txt'), noteText, function (err) {})
+
 
     // 任务结束收尾工作
     oldNote = newNote
