@@ -55,13 +55,14 @@ pm2 restart robot-notice
 轮询时间支持递归格式和cron风格
 
 递归格式：即配置config.js中的spier.rule为对象，其中属性支持month ，dayOfWeek ，dayOfMonth ，hour ，minute ，second 等
-cron格式: 将rule设置为字符串，如：'30 * * * * *'， 代表每30秒执行
+
+cron格式：将rule设置为字符串，如：'30 * * * * *'， 代表每30秒执行
 
 通配符说明：
 
-```
-*  *  *  *  *  *
-```
+
+\*  \*  \*  \*  \*  \*
+
 ┬ ┬ ┬ ┬ ┬ ┬
 
 │ │ │ │ │  |
