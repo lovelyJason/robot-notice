@@ -32,7 +32,10 @@ npm run dev
 
 <span style="color: red;font-size: 18px;">如果你监听的文档在指定的时间规则内被更新了，就能爬取到数据如下</span>
 
-<img align="right" src="./public/images/spider-notice.png" />
+![](./public/images/spider-notice.png)
+
+---
+
 
 ## 生产环境运行服务
 
